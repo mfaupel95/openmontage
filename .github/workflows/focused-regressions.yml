@@ -1,0 +1,21 @@
+name: Focused offline regressions
+on:
+  pull_request:
+  push:
+    branches: [main, hermes/ci-C9-20261109]
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run synthetic offline regressions
+        run: python -B -m tests.tools.test_subtitle_corrections -v
