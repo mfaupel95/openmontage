@@ -135,6 +135,7 @@ class SubtitleGen(BaseTool):
         """Apply word-level corrections to transcript segments.
 
         Handles case-insensitive matching and preserves punctuation.
+        Replacement values are literal text, not regular-expression templates.
         """
         import copy
 
@@ -158,7 +159,7 @@ class SubtitleGen(BaseTool):
                     import re as _re
                     seg["text"] = _re.sub(
                         r"\b" + _re.escape(wrong) + r"\b",
-                        right,
+                        lambda _match: right,
                         seg["text"],
                         flags=_re.IGNORECASE,
                     )
